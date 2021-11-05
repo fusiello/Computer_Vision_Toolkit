@@ -2,6 +2,8 @@
 
 ### Andrea Fusiello, 2018
 
+![alt text](http://www.diegm.uniud.it/fusiello/demo/toolkit/banner.jpg)
+
 This toolkit is a collection of Matlab functions implementing
 several Computer Vision algorithms.
 
