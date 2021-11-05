@@ -1,0 +1,113 @@
+
+
+
+\chapter{Codice Matlab}
+
+
+\vspace{-1.5cm}
+Il codice \textsc{Matlab} listato nel testo, assieme ad altre funzioni
+di supporto non riportate, può essere scaricato da
+\url{http://www.francoangeli.it/Area_multimediale/Elenco_Libri.asp}.
+Si tenga presente che si tratta di codice scritto con l'intento
+didattico e dunque:
+
+\begin{compactitem}
+\item nei casi in cui si sarebbe potuto scrivere il codice in modo da
+  risultare più efficiente a scapito della leggibilità si è
+  privilegiato quest'ultima;
+\item per non allungare eccessivamente i listati mancano controlli
+  sulla conformità dei parametri passati alle funzioni con quanto si
+  assume all'interno delle funzioni stesse;
+\item per la stessa ragione manca la documentazione in testa alla
+  funzione ed i commenti sono usati con parsimonia;
+\item per ragioni di compattezza e semplicità non vengono gestiti
+  casi particolari e situazioni patologiche che potrebbero
+  presentarsi in generale;
+\item i parametri in ingresso alle funzioni sono limitati agli
+  argomenti funzionali; altri parametri di controllo sono cablati
+  nella funzione stessa;
+\item   anche l'uso di un numero variabile di
+  parametri in ingresso e uscita e degli assegnamenti per omissione
+  (\eng{default}) è usato meno di quanto sarebbe lecito aspettarsi
+  in una libreria ben costruita.
+\end{compactitem}  
+
+Convenzioni relative alla interfaccia delle funzioni:
+\begin{compactitem}  
+\item i punti sia 2D che 3D sono sempre, quando serve, impaccati in
+  una matrice per colonne;
+\item i punti sono in coordinate cartesiane; 
+\item gli oggetti (punti, \ac{MPP}, ...) relativi a immagini multiple sono
+  rappresentati con \eng{cell arrays} indicizzati dall'immagine;
+\item nei casi in cui la funzione calcoli una trasformazione, questa
+  è tale da trasformare il secondo argomento sul primo.   
+\end{compactitem}
+
+
+\enlargethispage{1mm}
+\noindent
+Segue l'elenco delle principali funzioni implementate (sono omesse
+quelle ausiliarie). Tutte sono state provate con \textsc{Matlab}
+R2017a e \textsc{Octave} 4.2.1 sotto macOS 10.12.6.
+
+\bigskip
+
+\begin{adjustbox}{width=\textwidth,keepaspectratio}      
+  \begin{lstlisting}[ basicstyle=\fontsize{9}{11}\ttfamily,
+  xleftmargin=2em, frame= lines, numbers=none]
+F_sampson                   - Sampson signed residuals for F
+autocal                     - Autocalibration from fundamental matrices
+bearing                     - Camera locations from bearings
+bundleadj                   - Bundle adjustment
+calibLVH                    - Camera calibration from infnity homographies
+calibSMZ                    - Camera calibration from 2D-2D correspondences
+camera                      - Return a camera given COP,LOOK amd UP
+dlt                         - Direct Linear Transform
+eight_points                - 8-points algorithm for F/E
+essential_lin               - Essential matrix with 8-points algorithm
+eucl_upgrade                - Upgrade projective reconstruction given K
+exterior_lin                - Exterior orientation with Fiore's algorithm
+exterior_nonlin             - Non-linear refinement of exterior orientation
+fund                        - Computes fundamental matrix from camera matrices
+fund_lin                    - Fundamental matrix with 8-points algorithm
+fund_nonlin                 - Non-linear refinement of fundamental matrix
+fund_rob                    - Robust fundamental matrix 
+gpa                         - Generalized Procrustes analysis
+homog_lin                   - Homography with DLT algorithm
+homog_nonlin                - Non-linear refinement of H
+homog_rob                   - Robust homography fit
+homog_synch                 - Homography syncronization
+htx                         - Apply homogeous transform
+icp                         - Iterative Closet Point algorithm 
+imhs                        - Harris-Stephens corner strength
+imrectify                   - Apply rectification to images
+imstereo_ncc                - Stereo block-matching with NCC
+imstereo_ssd                - Stereo block-matching with SSD
+imwarp                      - Image warp
+jacobianBA                  - Jacobian of bundle adjustment
+jacobianEul                 - Jacobian of a rotation given by Euler angles
+jacobianHF                  - Jacobian of the Huang-Faugeras residual
+krt                         - Internal and external parameters from P
+opa                         - Orthogonal Procrustes analysis
+photostereo                 - Photometric stereo
+prec                        - Sturm-Triggs' projective reconstruction  
+precond                     - Normalize the coordinates of 2D points
+rectifyP                    - Epipolar rectification (calibrated)
+relative_lin                - Relative orientation
+relative_nonlin             - Non-linear refinement of relative orientation
+rotation_synch              - Rotation syncronization
+shape_from_silhouettes      - Shape from silhouettes
+simpleGN                    - Gauss-Newton method for non-linear LS
+simpleIRLS                  - Robust fit with the IRLS algorithm
+simpleLMS                   - Robust fit with the LMS algorithm
+simpleMSAC                  - Robust fit with the MSAC algorithm   
+space_carve                 - Space carving algorithm
+translation_synch           - Translation synchronization
+triang_lin                  - Triangulation for one point in multiple images
+triang_lin_batch            - Triangulation for n points in multiple images
+triang_nonlin               - Non-linear refinement of triangulation
+\end{lstlisting}
+\end{adjustbox}
+
+
+
