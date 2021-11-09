@@ -40,3 +40,12 @@ The functions in this toolkit are described in the book:
 The book is written in italian, although the code documentation
 is in english.
 
+
+---
+Andrea Fusiello                
+Dipartimento Politecnico di Ingegneria e Architettura (DPIA)  
+Università degli Studi di Udine, Via Delle Scienze, 208 - 33100 Udine  
+email: <andrea.fusiello@uniud.it>
+
+---
+

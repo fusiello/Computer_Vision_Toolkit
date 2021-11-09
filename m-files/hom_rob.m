@@ -15,5 +15,3 @@ function   [H, inliers] = hom_rob(m2,m1,varargin)
     % final linear fit
     H = hom_lin(m2(:,inliers), m1(:,inliers));
 end
-
-% IRLS not implemented yet (weighted hom_lin would be needed)
