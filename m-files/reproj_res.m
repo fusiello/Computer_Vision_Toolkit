@@ -12,9 +12,9 @@ function [res,A,B,C,D]  = reproj_res(K,kappa,G,M,m)
     
     res =  htx(K,qp) - m(:);
     
-    A = K(1:2,1:2) * Dr * De * kron( M',eye(3) ); % wrt external par.
+    A = K(1:2,1:2) * Dr * De * kron( M',eye(3) ); % wrt extrinsic par.
     B = K(1:2,1:2) * Dr * De * G(:,1:3);          % wrt 3D point
-    C = kron([qp;1]', eye(3)); C(3,:)=[];         % wrt internal par.
+    C = kron([qp;1]', eye(3)); C(3,:)=[];         % wrt intrinsic par.
     D = K(1:2,1:2) * Dkappa;                      % wrt distortion par.
 end
 
@@ -26,7 +26,7 @@ end
 %
 %     res =  htx(K,Mp) - m(:);
 %
-%     A = K * Dm * Dfp * kron( M',eye(3) ); A(3,:)=[];  % wrt external par.
+%     A = K * Dm * Dfp * kron( M',eye(3) ); A(3,:)=[];  % wrt extrinsic par.
 %     B = K * Dm * Dfp * G(:,1:3);          B(3,:)=[];  % wrt 3D point
-%     C = kron([Mp;1]', eye(3));            C(3,:)=[];  % wrt internal par.
+%     C = kron([Mp;1]', eye(3));            C(3,:)=[];  % wrt intrinsic par.
 %     D = K(1:2,1:2) * Dk;

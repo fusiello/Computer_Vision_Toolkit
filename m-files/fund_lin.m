@@ -13,7 +13,7 @@ F = eight_points(m2, m1, w);
 
 % enforce singularity of  F
 [U,D,V] = svd(F);
-D(3,3) = 0; F = U *D*V';
+D(3,3) = 0; F = U*D*V';
 
 % apply the inverse scaling
 F = T2' * F * T1;

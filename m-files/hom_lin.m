@@ -6,7 +6,8 @@ function H = hom_lin(m2,m1,w)
     end 
     
     % pre-conditioning
-    [T1,m1] = precond(m1); [T2,m2] = precond(m2);
+    [T1,m1] = precond(m1); 
+    [T2,m2] = precond(m2);
     
     H = dlt(m2, m1, w);
     

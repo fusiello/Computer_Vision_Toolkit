@@ -1,5 +1,5 @@
 function [K,R,t] = krt (P )
-%KRT Internal and external parameters from P
+%KRT Intrinsic and extrinsic parameters from P
 
 [Q,U] = qr(inv(P(1:3, 1:3)));
 % enforce negative focal

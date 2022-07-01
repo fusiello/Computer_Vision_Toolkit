@@ -29,8 +29,8 @@ function [R,J] = eul(a)
         J = [J_1(:), J_2(:), J_3(:)] ;
     end
     
-    if  abs(abs(a(2)) - pi/2) < 0.01 
-        warning('Eulear rotation close to singularity')
-    end
+%      if  abs(abs(a(2)) - pi/2) < 0.01 
+%          warning('Eulear rotation close to singularity')
+%      end
     
 end

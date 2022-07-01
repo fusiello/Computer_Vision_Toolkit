@@ -22,7 +22,7 @@ function [R,t] = exterior_iter(m,M,K)
             break; end
         
         % solve for z
-        z  =(kr(eye(size(Q,2)),Q))\B(:);
+        z = diagc(Q)\B(:);
         %  fix sign of scale
         z = z * sign(z(1));
         z(z<0) = 0;

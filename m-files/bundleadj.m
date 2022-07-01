@@ -2,21 +2,21 @@ function [P_out,M_out,kappa_out] = bundleadj(P0,M0,m,varargin)
     %BUNDLEADJ  Bundle adjustment (Euclidean)
     %
     % Options:
-    %  - FixedInterior: Only camera external orientation parameters
+    %  - FixedIntrinsic: Only camera extrinsic parameters
     %        and 3D points are adjusted.
-    %  - AdjustCommonInterior: Adjust interior parameters, common to
+    %  - AdjustCommonIntrinsic: Adjust intrinsic parameters, common to
     %       all images. All images have been taken with the same
     %       camera under constant settings.
-    %  - AdjustSeparateInterior: Adjust interior parameters, individual
+    %  - AdjustSeparateIntrinsic: Adjust intrinsic parameters, individual
     %       for each image. Each image is captured with a different
     %       camera and/or with varying zoom setting.
-    %  - InteriorParameters: When adjusting, specify how many
+    %  - IntrinsicParameters: When adjusting, specify how many
     %       parameters to use
     %  - FixedPoints: Some (or all) of the 3D points can be kept fixed,
     %       i.e. they can be designated as ground control points.
     % - DistortionCoefficients: use radial distortion either as fixed
     %       values or as initial values to be adjusted (follows the
-    %       interior parameters)
+    %       intrinsic parameters)
     
     assert(size(M0,1) ==3);
     assert(size(m{1},1) ==2);
@@ -47,17 +47,17 @@ function [P_out,M_out,kappa_out] = bundleadj(P0,M0,m,varargin)
     
     n_imm = length(m);
     switch opts.mode
-        case 1 % Fixed interior parameters
+        case 1 % Fixed intrinsic parameters
             n_cam_p = 6; % # of parameters per camera
             index.p = n_cam_p*n_imm;
             index.k = @(i) [];
             index.d = @(i) [];
-        case 2  % Adjust common interior parameters (+ radial)
+        case 2  % Adjust common intrinsic parameters (+ radial)
             n_cam_p = 6; % # of parameters per camera
             index.p = n_cam_p*n_imm + opts.n_int_p + n_dist_p;
             index.k = @(i) index.p - (opts.n_int_p + n_dist_p) + 1 : index.p - n_dist_p;
             index.d = @(i) index.p - n_dist_p + 1 :  index.p;
-        case 3  % Adjust individual interior parameters (+ radial)
+        case 3  % Adjust individual intrinsic parameters (+ radial)
             n_cam_p = 6+opts.n_int_p+n_dist_p; % # of parameters per camera
             index.p = n_cam_p*n_imm;
             index.k = @(i) n_cam_p*(i-1)+7:n_cam_p*(i-1)+7+opts.n_int_p-1;
@@ -77,14 +77,14 @@ function [P_out,M_out,kappa_out] = bundleadj(P0,M0,m,varargin)
         [K,R,t] = krt(P0{i});
         g(index.r(i)) = ieul(R);   g(index.t(i)) = t;
         switch opts.mode
-            case 1 % fixed interior parameters.
+            case 1 % fixed intrinsic parameters.
                 K_fix{i} = K;
-            case 2  % average common interior parameters (+ radial)
+            case 2  % average common intrinsic parameters (+ radial)
                 g(index.k(i)) = g(index.k(i)) + ...
                     (K2par(K,opts.n_int_p)-g(index.k(i)))/i;
                 g(index.d(i)) = g(index.d(i)) + ...
                     (opts.kappa{i}-g(index.d(i)))/i;
-            case 3  % adjust individual interior parameters (+ radial)
+            case 3  % adjust individual intrinsic parameters (+ radial)
                 g(index.k(i)) = K2par(K,opts.n_int_p);
                 g(index.d(i)) = opts.kappa{i};     
         end
@@ -104,9 +104,9 @@ function [P_out,M_out,kappa_out] = bundleadj(P0,M0,m,varargin)
     P_out=cell(1,n_imm);
     for i = 1:n_imm
         switch opts.mode
-            case 1 % fixed interior parameters
+            case 1 % fixed intrinsic parameters
                 P_out{i} = K_fix{i} * [eul(g_out(index.r(i))) g_out(index.t(i))]*Tc;
-            case {2,3}  % adjusted interior parameters
+            case {2,3}  % adjusted intrinsic parameters
                 P_out{i} = par2K(g_out(index.k(i))) * [eul(g_out(index.r(i))) g_out(index.t(i))]*Tc;
                 kappa_out{i} = g_out(index.d(i));
         end
@@ -159,10 +159,10 @@ function opts = parse_options(options)
     % parse options for BA and produce an opts struct
     
     % initialize default parameters
-    opts.mode       = 1;  % fixed interior parameters (do no adjust)
+    opts.mode       = 1;  % fixed intrinsic parameters (do no adjust)
     opts.vis        = []; % visibility (default is full visibility)
     opts.verbose    = false;
-    opts.n_int_p    = 3;  % number of interior parameters to use
+    opts.n_int_p    = 3;  % number of intrinsic parameters to use
     opts.kappa      = []; % distortion parameters 
     opts.gcp        = 0;  % number of control points (in the end of M)
     
@@ -170,13 +170,13 @@ function opts = parse_options(options)
     i = 1;
     while i <=  length(options)
         switch options{i}
-            case 'FixedInterior'
-                opts.mode = 1; % fixed interior parameters (do not adjust)
-            case 'AdjustCommonInterior'
-                opts.mode = 2; % adjust common interior parameters
-            case 'AdjustSeparateInterior'
-                opts.mode = 3; % adjust individual interior parameters
-            case 'InteriorParameters'
+            case 'FixedIntrinsic'
+                opts.mode = 1; % fixed intrinsic parameters (do not adjust)
+            case 'AdjustCommonIntrinsic'
+                opts.mode = 2; % adjust common intrinsic parameters
+            case 'AdjustSeparateIntrinsic'
+                opts.mode = 3; % adjust individual intrinsic parameters
+            case 'IntrinsicParameters'
                 opts.n_int_p = options{i+1};
                 i = i + 1;
             case 'DistortionCoefficients'
@@ -200,12 +200,12 @@ function opts = parse_options(options)
     
    % if opts.verbose
         switch opts.mode
-            case 1 % Fixed interior parameters
-                fprintf('\tBA: FixedInterior\n')
-            case 2  % Adjust common interior parameters
-                fprintf('\tBA: AdjustCommonInterior\n')
-            case 3  % Adjust individual interior parameters
-                fprintf('\tBA: AdjustSeparateInterior\n')
+            case 1 % Fixed intrinsic parameters
+                fprintf('\tBA: FixedIntrinsic\n')
+            case 2  % Adjust common intrinsic parameters
+                fprintf('\tBA: AdjustCommonIntrinsic\n')
+            case 3  % Adjust individual intrinsic parameters
+                fprintf('\tBA: AdjustSeparateIntrinsic\n')
         end
         if ~isempty(opts.kappa)
          fprintf('\tBA: Using radial distortion\n')

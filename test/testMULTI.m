@@ -62,7 +62,7 @@ fprintf('CalibSMZ reproj RMS error:\t\t %0.5g \n',...
     rmse(reproj_res_batch(P_est,M_grid, m_grid)) );
 
 [P_out,M_out] = bundleadj(P_est,M_grid,m_grid,...
-    'AdjustCommonInterior','InteriorParameters',5, 'FixedPoints',size(M_grid,2));
+    'AdjustCommonIntrinsic','IntrinsicParameters',5, 'FixedPoints',size(M_grid,2));
 
 fprintf('CalibSMZ reproj RMS error:\t\t %0.5g \n', ...
     rmse(reproj_res_batch(P_out,M_out,m_grid)) );
@@ -76,13 +76,24 @@ H23= K*eul(rand(1,3))*inv(K);
 
 K_out  = calibLVH( {H12,H13,H23 });
 
-fprintf('H_infty calibration %% error:\t %0.5g \n',100*abs(K_out(1,1)-K(1,1))/K(1,1)) ;
+fprintf('H_infty calibration %% error:\t\t %0.5g \n',100*abs(K_out(1,1)-K(1,1))/K(1,1)) ;
 
 %-------------------------------------------------------------------------
 % Triangulation
 
-X_est=triang_lin_batch(P_gt, m);
-fprintf('Triangulation batch error:\t %0.5g \n', normF(M-X_est)/n_pts  );
+
+% random visibility
+vis = rand(n_pts,n_imm) < density; % is logical
+figure, spy(vis),title('Visibility');ylabel('points');xlabel('images')
+if any(sum(vis,2)  < 3)
+    error('Not enough visibility')
+end
+
+X_est=triang_lin_batch(P_gt, m, vis);
+fprintf('Triangulation batch error:\t\t %0.5g \n', normF(M-X_est)/n_pts  );
+
+X_est = triang_nonlin_batch(X_est,P_gt, m, vis);
+fprintf('Triangulation non_lin batch error:\t %0.5g \n', normF(M-X_est)/n_pts  );
 
 %-------------------------------------------------------------------------
 % Projective reconstruction
@@ -95,13 +106,6 @@ fprintf('Projective Recon reproj RMS error:\t %0.5g \n',...
 %---------------------------------------------------------------------
 % Bundle Adjustment
 
-% random visibility
-vis = rand(n_pts,n_imm) < density; % is logical
-figure, spy(vis),title('Visibility');ylabel('points');xlabel('images')
-if any(sum(vis,2)  < 3)
-    error('Not enough visibility')
-end
-
 kappa = num2cell(.2*ones(1,n_imm),1);
 M_in = X_est;
 % Initial rec
@@ -113,19 +117,19 @@ end
 fprintf('Bundle Adjustment RMS error (before):\t %0.5g \n',...
     rmse(reproj_res_batch(P_in, M_in, m, 'Visibility', vis)) );
 
-%[P_out,M_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'FixedInterior');
-[P_out,M_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'FixedInterior', 'DistortionCoefficients', kappa);
+%[P_out,M_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'FixedIntrinsic');
+[P_out,M_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'FixedIntrinsic', 'DistortionCoefficients', kappa);
 kappa_out = kappa;
 fprintf('Bundle Adjustment RMS error (after):\t %0.5g \n', ...
     rmse(reproj_res_batch(P_out,M_out, m, 'Visibility',vis,'DistortionCoefficients', kappa_out) ));
 
-% [P_out,M_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustCommonInterior','InteriorParameters',5);
-[P_out,M_out, kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustCommonInterior','InteriorParameters',5,'DistortionCoefficients', num2cell(zeros(1,n_imm),1));
+% [P_out,M_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustCommonIntrinsic','IntrinsicParameters',5);
+[P_out,M_out, kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustCommonIntrinsic','IntrinsicParameters',5,'DistortionCoefficients', num2cell(zeros(1,n_imm),1));
 fprintf('Bundle Adjustment RMS error (after):\t %0.5g \n', ...
     rmse(reproj_res_batch(P_out,M_out, m, 'Visibility',vis,'DistortionCoefficients', kappa_out) ));
 
-% [P_out,M_out,kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustSeparateInterior');
-[P_out,M_out,kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustSeparateInterior','DistortionCoefficients', num2cell(zeros(1,n_imm),1));
+% [P_out,M_out,kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustSeparateIntrinsic');
+[P_out,M_out,kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustSeparateIntrinsic','DistortionCoefficients', num2cell(zeros(1,n_imm),1));
 fprintf('Bundle Adjustment RMS error (after):\t %0.5g \n', ...
     rmse(reproj_res_batch(P_out,M_out, m, 'Visibility',vis,'DistortionCoefficients', kappa_out) ));
 

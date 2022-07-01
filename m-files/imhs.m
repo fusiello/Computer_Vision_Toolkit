@@ -1,17 +1,18 @@
 function C = imhs(I,s)
 %IMHS Harris-Stephens corner strength
-    
-    Sob = fspecial('sobel');
-    Gaus = fspecial('gaussian',s);
-    
+% s is the integration scale
+
+    S = fspecial('sobel');
+    G = fspecial('gaussian',2*ceil(2*s)+1, s);
+     
     % directional derivatives
-    Iu = filter2(Sob, I, 'same');
-    Iv = filter2(Sob',I, 'same');
+    Iu = filter2(S, I, 'same');
+    Iv = filter2(S',I, 'same');
     
     % convolve with Gaussian
-    Iuv = filter2(Gaus, Iu.*Iv,'same');
-    Ivv = filter2(Gaus, Iv.^2, 'same');
-    Iuu = filter2(Gaus, Iu.^2, 'same');
+    Iuv = filter2(G, Iu.*Iv,'same');
+    Ivv = filter2(G, Iv.^2, 'same');
+    Iuu = filter2(G, Iu.^2, 'same');
     
     % trace and determinant
     tr = Iuu + Ivv;

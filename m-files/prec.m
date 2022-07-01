@@ -18,7 +18,7 @@ function [PPM, M] = prec(m)
     Q=tmp;  % converted to homogeneous
     
     % initialization
-    Z=ones(n_imm,size(Q,2));  res = Inf;
+    Z = ones(n_imm,size(Q,2));  res = Inf;
     
     for iter = 1: MaxIterations
         
@@ -27,8 +27,8 @@ function [PPM, M] = prec(m)
         
         Z = [];  % estimate depth                             
         for i = 1:n_imm
-            b = P(3*i-2:3*i,:) * M;
-            zi= (kr(eye(size(M,2)), Q(3*i-2:3*i,:)))\b(:);
+            B = P(3*i-2:3*i,:) * M;
+            zi = diagc(Q(3*i-2:3*i,:))\B(:);
             Z = [Z; zi'/norm(zi)]; % normalization
         end
         

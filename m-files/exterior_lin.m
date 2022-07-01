@@ -8,8 +8,9 @@ function [R,t] = exterior_lin(m,M,K)
     r = sum(diag(D)>max(size(M))*eps(max(D(:)))); % = rank(M)
     Vr = V(:,r+1:end);
     
+    
     % solve null space
-    [~, ~, V] = svd(kr(Vr',Q));
+    [~, ~, V] = svd(kron(Vr',ones(3,1)) .* kron(ones(size(Vr,2),1), Q));
     z = V(:,end);
     
     %  fix sign of scale

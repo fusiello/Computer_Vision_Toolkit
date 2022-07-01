@@ -1,4 +1,4 @@
-function h = fspecial(type,P1,P2)
+  function h = fspecial(type,P1,P2)
     %FSPECIAL Create predefined filters.
     %   H = FSPECIAL(TYPE) creates a two-dimensional filter H of the
     %   specified type. (FSPECIAL returns H as a computational

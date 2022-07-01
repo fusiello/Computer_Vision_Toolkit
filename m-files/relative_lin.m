@@ -1,4 +1,4 @@
-function [R,t] = relative_lin(q2, q1, K1, K2)
+function [R,t] = relative_lin(q2, q1, K2, K1)
 %RELATIVE_LIN Relative orientation
 
     q1 = K1\ensure_homogeneous(q1); 

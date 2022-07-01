@@ -21,7 +21,7 @@ iK = diag([-1,-1,1])*chol(B); % force negative focal
 
 K = inv(iK); K = K./K(3,3);
 
-% compute exterior parameters
+% compute extrinsic parameters
 for i = 1:numV
     A = iK * H{i};
     A = A/norm(A(:,1)); % remove scale

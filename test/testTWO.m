@@ -133,8 +133,6 @@ fprintf('Triangulation 1pt nonlin error:\t %0.5g \n', normF(X(:,1)-X1_nl) );
 X_est = triang_lin_batch({P1, P2}, {x1,x2});
 fprintf('Triangulation batch error:\t %0.5g \n', rmse(X(:)-X_est(:)));
 
-return
-
 disp(' ');
 %-------------------------------------------------------------------------
 % separate exterior orientation
