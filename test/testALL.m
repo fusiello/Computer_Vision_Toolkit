@@ -24,8 +24,8 @@ for i =1:size(mfiles,1)
     end
 end
 
-all  = getAllFiles(CVT,{'m'});
+all_files  = getAllFiles(CVT,{'m'});
 
 disp('These m-files are not covered by test:')
-foo=setdiff(all, called);
+foo=setdiff(all_files, called);
 fprintf('%s\n',foo{:});

@@ -8,26 +8,26 @@ normF = @(x) norm(x,'fro');
 noise = 1e-4;
 
 % 3D scene
-dist = 3; % distance camera - object center 
+d = 3; % distance camera - object center 
 
 % 3D points
 load tribuna;
-n = length(vertices);
-X = [0;0;dist] + vertices;
+n_pts = length(vertices);
+X = vertices + [0;0;d];
 % X =  [0;0;dist] + 2*(rand(3, n) - .5);
 
 % cameras
 % internal parameters
 width = 480; height=360;
-K = par2K([width/3,height/3, -1.4  1 0]);
+K = par2K([width/2,height/2, -1.4  1 0]);
 %P1 = K*[eye(3), [ -1;0;0]];
 %P2 = K*[eye(3), [ 1;0;0]];
-P1= K*camera([ .9;0;0],[-.05; .05; dist], [.95; 1; 0]); %left
-P2= K*camera([-.9;0;0],[.05; -.05; dist], [-.97;1; 0]); %right
+P1= K*camera([ .9;0;0],[-.05; .05; d], [.95; 1; 0]); %left
+P2= K*camera([-.9;0;0],[.05; -.05; d], [-.97;1; 0]); %right
 
 % image points
-x1 = htx(P1,X)+ noise*randn(2,n);
-x2 = htx(P2,X)+ noise*randn(2,n);
+x1 = htx(P1,X)+ noise*randn(2,n_pts);
+x2 = htx(P2,X)+ noise*randn(2,n_pts);
 
 % some plots
 figure,
@@ -53,6 +53,8 @@ axis ij,  set(gca,'XAxisLocation','top')
 [T1,T2,Pn1,Pn2] = rectifyP(P1,P2);
 xr1 = htx(T1,x1); xr2 = htx(T2,x2);
 
+[H1,H2, K1] = rectifyF(x1, x2, [width,height]);
+  
 % some plots
 figure;
 subplot(1,2,1); scatter(xr1(1,:), xr1(2,:),[],lines(size(x1,2)),'filled');
@@ -85,6 +87,7 @@ plot3(X_obj(1,:), X_obj(2,:), X_obj(3,:),'+b');
 title('Triangulation from disparity')
 
 disp(' ');
+
 
 %--------------------------------------------------------------------------
 % radial distortion

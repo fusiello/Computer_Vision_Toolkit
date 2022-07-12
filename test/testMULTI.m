@@ -1,40 +1,48 @@
-
 close all
 reset_random;
 
 normF = @(x) norm(x,'fro');
 
+%---------------------------------------------------------------------
+% Prepare ground truth
 n_imm = 8;  % # of images
-n_pts = 25; % # of points
-density = .7; % holes in the adjacency and visibility
+noise = 1e-4; % gaussian noise on image points
+density = .8; % holes in the adjacency and visibility
 
-noise =  1e-4;
+% 3D scene
+d = 8; % distance camera - object center
 
-M = 1.2*(rand(3, n_pts)-.5);  % 3D points
+% 3D points
+load tribuna;
+n_pts = length(vertices);
+M =  vertices + [0;0;1];
 
-K = [-500 0 200
-    0  -500 200
-    0    0   1] ; % internal parameters
+% cameras
+% internal parameters
+width = 480; height=360;
+K = par2K([width/2,height/2, -1.4  1 0]);
 
-
-plot3(M(1,:), M(2,:), M(3,:), 'o'); hold on
-
-% ground truth
 G_gt = cell(1,n_imm);
 P_gt = cell(1,n_imm);
 C_gt = cell(1,n_imm);
 m = cell(1,n_imm);
 
 for i = 1:n_imm
-    Cop = 5 * (rand(3,1) -.5);
-    Cop(3) = 10 + 2*(rand-.5);
-    C_gt{i} =  Cop;  % centres
-    G_gt{i} = camera(  Cop, rand(3,1) -.5, [0;1;0]);
-    P_gt{i}  = K*G_gt{i};
+    C_gt{i} =  [5 * (rand(2,1) -.5);d+ 2*(rand-.5)]; % cop
+    G_gt{i} = camera(  C_gt{i}, rand(3,1)-.5, [0;1;0]);
+    P_gt{i}  = K * G_gt{i};
     G_gt{i} = [G_gt{i}; 0 0 0 1];
-    plotcam(P_gt{i},.7);
     
-    m{i}    = htx(P_gt{i},M)  + noise*randn(2,1); % noise
+    % image points
+    m{i} = htx(P_gt{i},M)  + noise*randn(2,n_pts); % noise
+end
+
+% some plots
+scatter3(M(1,:), M(2,:),M(3,:),[],lines(n_pts),'filled');
+hold on, wireframe(M', edges, 'k:'); hold on
+
+for i = 1:n_imm
+    plotcam(P_gt{i},.7);
 end
 
 disp(' ');
@@ -44,7 +52,7 @@ disp(' ');
 % planar points on a grid
 [Xgrid,Ygrid] = meshgrid(-0.5:0.2:0.4);
 M_grid = [Xgrid(:)';Ygrid(:)'; zeros(1,size(Xgrid(:),1))];
-plot3(M_grid(1,:), M_grid(2,:), M_grid(3,:), '.')
+plot3(M_grid(1,:), M_grid(2,:), M_grid(3,:), '.r')
 zlabel('Z')
 
 H_est=cell(1,1);
@@ -67,6 +75,7 @@ fprintf('CalibSMZ reproj RMS error:\t\t %0.5g \n',...
 fprintf('CalibSMZ reproj RMS error:\t\t %0.5g \n', ...
     rmse(reproj_res_batch(P_out,M_out,m_grid)) );
 
+
 %--------------------------------------------------------------
 % (Auto)Calibration from H_infty LVH
 
@@ -76,17 +85,20 @@ H23= K*eul(rand(1,3))*inv(K);
 
 K_out  = calibLVH( {H12,H13,H23 });
 
-fprintf('H_infty calibration %% error:\t\t %0.5g \n',100*abs(K_out(1,1)-K(1,1))/K(1,1)) ;
+fprintf('H_infty calibration %% error:\t\t %0.5g \n',100*abs((K_out(1,1)-K(1,1))/K(1,1)) );
 
 %-------------------------------------------------------------------------
 % Triangulation
 
 
 % random visibility
-vis = rand(n_pts,n_imm) < density; % is logical
-figure, spy(vis),title('Visibility');ylabel('points');xlabel('images')
-if any(sum(vis,2)  < 3)
-    error('Not enough visibility')
+while true
+    % if density is too low this might cicle forever
+    vis = rand(n_pts,n_imm) < density; % is logical
+    figure, spy(vis),title('Visibility');ylabel('points');xlabel('images')
+    if all(sum(vis,2) >= 3)
+        break
+    end
 end
 
 X_est=triang_lin_batch(P_gt, m, vis);
@@ -123,10 +135,12 @@ kappa_out = kappa;
 fprintf('Bundle Adjustment RMS error (after):\t %0.5g \n', ...
     rmse(reproj_res_batch(P_out,M_out, m, 'Visibility',vis,'DistortionCoefficients', kappa_out) ));
 
+
 % [P_out,M_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustCommonIntrinsic','IntrinsicParameters',5);
 [P_out,M_out, kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustCommonIntrinsic','IntrinsicParameters',5,'DistortionCoefficients', num2cell(zeros(1,n_imm),1));
 fprintf('Bundle Adjustment RMS error (after):\t %0.5g \n', ...
     rmse(reproj_res_batch(P_out,M_out, m, 'Visibility',vis,'DistortionCoefficients', kappa_out) ));
+
 
 % [P_out,M_out,kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustSeparateIntrinsic');
 [P_out,M_out,kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustSeparateIntrinsic','DistortionCoefficients', num2cell(zeros(1,n_imm),1));
@@ -185,7 +199,7 @@ fprintf('Synchronization error (SE3):\t %0.5g \n',err/n_imm);
 
 % is paralell-rigid?
 if ~ParallelRigidityTest(A,3)
-    error('graph is not p.rigid, localization is impossible')
+    error('graph is not parallel rigid, localization is impossible')
 end
 
 % forget the module of translation

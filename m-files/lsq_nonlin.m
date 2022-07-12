@@ -5,7 +5,12 @@ function [x,J]  = lsq_nonlin(res,x0, varargin)
     %   'GaussNewton'    - solve with Gauss-Newton (no damping)
     %   'Reduced'        - solve reduced normal equations (only for BA)
     
-    % Note: if the optimization toolbox installed, use LSQNONLIN
+    use_LSQNONLIN = false;
+    
+    % If the optimization toolbox is not installed, use replecememt
+    if ~license('test','optimization_toolbox') 
+        use_LSQNONLIN = false;
+    end
     
     opts = parse_options(varargin);
     
@@ -18,8 +23,8 @@ function [x,J]  = lsq_nonlin(res,x0, varargin)
     % lambda = 0 is Gauss-Newton
     % lambda > 0 is Levenberg-Marquardt (default)
     
-    if true % ~license('test','optimization_toolbox')
-        % use this replacement for lsqnonlin
+    if ~use_LSQNONLIN 
+        % replacement for lsqnonlin
         
         % initialization
         x = x0(:); dx = 0;
@@ -101,7 +106,7 @@ function [x,J]  = lsq_nonlin(res,x0, varargin)
         if opts.verbose 
             fprintf('\tlsq_nonlin: final residual norm %0.5g \n', norm(y));
         end
-    else % optimization toolbox installed, use lsqnonlin
+    else % use lsqnonlin from optimization toolbox 
         
         options = optimoptions('lsqnonlin','Algorithm','levenberg-marquardt',...
             'SpecifyObjectiveGradient',true,'MaxIterations',MaxIterations,...

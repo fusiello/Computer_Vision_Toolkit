@@ -43,13 +43,12 @@ function opts = parse_options(options)
                 opts.kappa = options{i+1};
                 i = i + 1;
             case 'Visibility'
-                disp('BA: Visibility given')
                 opts.vis = logical(options{i+1});
                 i = i + 1;
             case 'Verbose'
                 opts.verbose = true;
             otherwise
-                error('BA: unrecognised option');
+                error('unrecognised option');
         end
         i = i + 1;
     end
