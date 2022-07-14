@@ -10,7 +10,7 @@ function [rs, Js] = sampson_hom(H,m1,m2)
     for i = 1:size(m1,2)
         ra = Q'*(skew(m2(:,i))*H*m1(:,i)); % algebraic residual
         
-        V = Q'*[skew(m2(:,i))*H*Q, -skew(H*m1(:,i))*Q]; C = inv(V*V');
+        V = Q'*[skew(m2(:,i))*H*Q, -skew(H*m1(:,i))*Q]; C = pinv(V*V');
         rs = [rs; - V'*C * ra]; % Sampson residual
         
         if nargout >    1  % Jacobian required

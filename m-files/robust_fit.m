@@ -26,11 +26,11 @@ function [bestmodel, bestinliers] = simpleMSAC(x, modelfit, modeldist, p, t)
     %SIMPLEMSAC - Robust fit with the MSAC algorithm
     
     n = size(x,2);
-    alpha = 0.99; % Desired probability of success
-    f = 0.5 ;     % Pessimistic estimate of inliers fraction
+    alpha = 0.995; % Desired probability of success
+    f = 0.4 ;     % Pessimistic estimate of inliers fraction
     
-    MaxIterations = 1000; % Max number of iterations
-    MinIterations = 100;  % Min number of iterations
+    MaxIterations = 5000; % Max number of iterations
+    MinIterations = 500;  % Min number of iterations
     mincost =  Inf;
     
     i = 0;
@@ -38,7 +38,7 @@ function [bestmodel, bestinliers] = simpleMSAC(x, modelfit, modeldist, p, t)
         
         % Generate p random indicies in the range 1..n
         mss = randsample(n, p);
-        
+               
         % Fit model to this minimal sample set.
         model = modelfit(x(:,mss),[]);
         
@@ -58,7 +58,6 @@ function [bestmodel, bestinliers] = simpleMSAC(x, modelfit, modeldist, p, t)
         i = i + 1;
         if i > MaxIterations, break, end
     end
-    
 end
 
 

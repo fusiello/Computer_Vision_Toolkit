@@ -5,10 +5,15 @@ m1=ensure_homogeneous(m1);
 m2=ensure_homogeneous(m2);
 
 % first optimize with fixed f (to avoid jacobian singularity)
-p_out = lsq_nonlin(@(x)costRectif(x,sz,m1,m2), [0 0 0 0 0]);
+p_init = lsq_nonlin(@(x)costRectif(x,sz,m1,m2), [0 0 0 0 0]);
 
 % then add f to the optimization
-p_out = lsq_nonlin(@(x)costRectif(x,sz,m1,m2), [p_out(:); 1]);
+p_out = lsq_nonlin(@(x)costRectif(x,sz,m1,m2), [p_init(:); 1]);
+
+% if extreme focal, fall back to default focal
+if p_out(6) <.5 || p_out(6) > 2
+    p_out = [p_init(:); 1];
+end
 
 % recover K
 d = 0.5*(sz(1)+sz(2));  f = (d/2)/tan(p_out(6)/2);
@@ -28,7 +33,6 @@ K3 = commutation(3,3); S = skew([1 0 0]);
 n = length(a_in);     % number of variable parameters
 a = [0;0;0;0;0;1];    % default values
 a(1:n) = a_in;        % overwrite default
-
 
 % intrinsic parameters of the original cameras
 d = 0.5*(sz(1)+sz(2));
@@ -68,4 +72,4 @@ end
 
 % The focal lenght is parametrized as f = (d/2)/tan(a(6)/2)
 % where d is the image diagonal and a(6) is the diagonal FOV in radiants
-% a(6) =  1 correspond to a FOV of 57 degrees
+% the default is a(6) = 1, which correspond to a FOV of 57 degrees
