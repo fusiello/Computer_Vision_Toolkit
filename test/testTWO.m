@@ -18,8 +18,9 @@ X = vertices + [0;0;d];
 
 % cameras
 % internal parameters
-width = 480; height=360;
-K = par2K([width/2,height/2, -1.4  1 0]);
+width = 4000; height=3000;
+K = [ -2963.1   0  2013.6 ; 0 -2971.3  1486.5  ; 0 0 1];
+
 %P1 = K*[eye(3), [ -1;0;0]];
 %P2 = K*[eye(3), [ 1;0;0]];
 P1= K*camera([ .9;0;0],[-.05; .05; d], [.95; 1; 0]); %left
@@ -54,7 +55,7 @@ axis ij,  set(gca,'XAxisLocation','top')
 xr1 = htx(T1,x1); xr2 = htx(T2,x2);
 
 [H1,H2, K1] = rectifyF(x1, x2, [width,height]);
-  
+
 % some plots
 figure;
 subplot(1,2,1); scatter(xr1(1,:), xr1(2,:),[],lines(size(x1,2)),'filled');
@@ -87,7 +88,6 @@ plot3(X_obj(1,:), X_obj(2,:), X_obj(3,:),'+b');
 title('Triangulation from disparity')
 
 disp(' ');
-
 
 %--------------------------------------------------------------------------
 % radial distortion
@@ -179,7 +179,7 @@ fprintf('Relative ___lin SO3 error:\t %0.5g \n', normF(R21 - G21(1:3,1:3)));
 [R21,t21] = relative_nonlin(R21,t21 ,x2, x1, K, K);
 fprintf('Relative nonlin SO3 errror:\t %0.5g \n',  normF(R21 - G21(1:3,1:3) ));
 
-X_model = triang_lin_batch({K*[eye(3),zeros(3,1)], K*[R21,t21]}, {x1,x2});
+X_model = triang_lin_batch({K*eye(3,4), K*[R21,t21]}, {x1,x2});
 
 % align to GT - assume the first 6 points are GCP
 [R,t,s] = opa(X(:,1:6),X_model(:,1:6));

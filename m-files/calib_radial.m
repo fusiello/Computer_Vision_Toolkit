@@ -1,5 +1,5 @@
 function [k,P_est] = calib_radial( x_dist, X, n)
-    %CALIB_RADIAL calibrate radial distortion with resection
+    %CALIB_RADIAL Calibrate radial distortion with resection
     %  n is the number od coefficient
     
     % constants

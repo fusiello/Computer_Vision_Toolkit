@@ -1,5 +1,5 @@
 function K = fdh(H,u0,v0)
-    %FDH compute focal distance from homography
+    %FDH Compute focal distance from homography
     % The principal point (u0, v0) is needed
     
     S = duplication(3);

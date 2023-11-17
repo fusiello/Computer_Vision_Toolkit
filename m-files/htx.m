@@ -10,8 +10,8 @@ Y = T * [X; ones(1, size(X,2))]; % apply tranform
 
 nr = size(Y,1);
 
-Y = Y ./ repmat(Y(nr,:),nr,1); % projective division
+Y = Y ./ repmat(Y(nr,:),nr,1); % perspective division
 
-Y(nr,:) = []; % remove ones
+Y(nr,:) = []; % remove trailing ones
 
 end

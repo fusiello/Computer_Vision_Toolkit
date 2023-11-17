@@ -4,7 +4,7 @@ function R = rotation_synch(Z,A)
     n = size(A,1);
     
     iD = diag(1./sum(A,2));             % inverse degree matrix
-    [Q,~]=eigs( kron(iD,eye(3))*Z,3,'lr'); % top 3 eigenvectors
+    [Q,~] = eigs( kron(iD,eye(3))*Z,3,'lr'); % top 3 eigenvectors
     
     Q = real(Q/(Q(1:3, 1:3))); % normalize first rotation to I
     % and guard against spurious complex valuess from roundoff

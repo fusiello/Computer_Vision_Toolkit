@@ -19,8 +19,9 @@ M =  vertices + [0;0;1];
 
 % cameras
 % internal parameters
-width = 480; height=360;
-K = par2K([width/2,height/2, -1.4  1 0]);
+width = 4000; height=3000;
+K = [ -2963.1   0  2013.6 ; 0 -2971.3  1486.5  ; 0 0 1];
+
 
 G_gt = cell(1,n_imm);
 P_gt = cell(1,n_imm);
@@ -114,6 +115,7 @@ fprintf('Triangulation non_lin batch error:\t %0.5g \n', normF(M-X_est)/n_pts  )
 
 fprintf('Projective Recon reproj RMS error:\t %0.5g \n',...
     rmse(reproj_res_batch(P_proj,M_proj, m)));
+
 
 %---------------------------------------------------------------------
 % Bundle Adjustment
@@ -236,10 +238,10 @@ for j=1:size(A,1)
     end
 end
 
-K0 = K + 20*randn(3,3); K0(3,3) = 1;
-K_out = autocal(F,K0)
+K0 = K + 200*randn(3,3); K0(3,3) = 1;
+K_out = autocalMC(F,K0)
 
-fprintf('Autocalibration %% error:\t %0.5g \n',100*abs(K_out(1,1)-K(1,1))/abs(K(1,1))) ;
+fprintf('Autocalibration MC f %% error:\t %0.5g \n',100*abs(K_out(1,1)-K(1,1))/abs(K(1,1))) ;
 
 %--------------------------------------------------------------
 %% Homography synchronization

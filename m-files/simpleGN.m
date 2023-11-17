@@ -25,6 +25,7 @@ function x = simpleGN(res,x0)
         else 
             % restore old values
             x = x_prev; y = y_prev;
+            disp('increase')
             break % GN does not accept error incraese
         end
         

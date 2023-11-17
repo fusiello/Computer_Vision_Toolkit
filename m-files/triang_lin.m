@@ -7,7 +7,7 @@ function M = triang_lin(P, m)
     end
     [~,~,V] = svd(L);
     M =  V(:,end)./V(end,end);
-    M = M(1:3,:);
+    M = M(1:3);
 end
     
     

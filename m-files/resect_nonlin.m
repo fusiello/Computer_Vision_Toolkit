@@ -14,7 +14,7 @@ end
 
 function [res,J]  = fobj(v,M,m)
     
-    [K,DK] = par2K(v(7:end)); 
+    [K,DK] = par2K(v(7:end));
     [R,DR] = eul(v(1:3)); t = v(4:6);
     
     J = []; res = [];

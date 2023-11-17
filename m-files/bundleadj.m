@@ -1,5 +1,5 @@
 function [P_out,M_out,kappa_out] = bundleadj(P0,M0,m,varargin)
-    %BUNDLEADJ  Bundle adjustment (Euclidean)
+    %BUNDLEADJ  Bundle adjustment 
     %
     % Options:
     %  - FixedIntrinsic: Only camera extrinsic parameters

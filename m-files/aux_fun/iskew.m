@@ -6,11 +6,9 @@ function  x = iskew(S)
 
 % Author: A. Fusiello
 
-
 if (size(S,1) ~=3) ||  (size(S,2) ~=3)
     error('Argument must be a 3x3 matrix');
 end
-
 
 %x=[S(3,2) S(1,3) S(2,1)]';
 
