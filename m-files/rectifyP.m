@@ -5,8 +5,7 @@ function [T1,T2,Pn1,Pn2] = rectifyP(P1,P2)
     [K1,R1,t1] = krt(P1); [K2,R2,t2] = krt(P2);
     
     % optical centers (unchanged)
-    c1 = - R1'*t1;
-    c2 = - R2'*t2;
+    c1 = - R1'*t1;  c2 = - R2'*t2;
     
     % new x axis is the baseline
     v1 = (c2-c1) * sign(R1(1,:)*(c2-c1));

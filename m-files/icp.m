@@ -4,7 +4,7 @@ function [R,t] = icp(D,M)
     MaxIterations = 400;
     FunctionTol = 1e-6;
     StepTol = 1e-6;
-    G=eye(4);  res = Inf;
+    G = eye(4);  res = Inf;
     
     for iter = 1: MaxIterations
         

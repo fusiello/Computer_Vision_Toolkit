@@ -1,15 +1,19 @@
-
-
 function [K,J] = par2K( p_in , sz)
 %PAR2K Return a K matrix and its jacobian from parameters
+% sz is the image size
 
 n = length(p_in); % number of input parameters
-std_width = 2000; % standard image width
 
+% sz must be provided for K to be meaningful, 
+% however par2K(K2par(K,5,sz), sz) is consistent with any sz, 
+% so we provide a default only for this usage
 if nargin < 2
-    sz = [std_width std_width*3/4]; % default size
+    sz  = [2000, 1500];
 end
-p =  [-1.2, sz(1)/2, sz(2)/2, 1, pi/2]; % default values
+
+% default parameters
+p =  [-1.2, sz(1)/2, sz(2)/2, 1, pi/2];
+% the dafault fov is 1.2 rad = 68 deg
 
 p(1:n) = p_in;   % overwrite default
 
@@ -33,21 +37,12 @@ J(:,n+1:end) = []; % cut the fixed parameters
 
 end
 
-% Parameters are:  [fov, u0, v0, aspect_ratio, skew]
-% The focal lenght is function of hfov and width
-% The default hfov is 1.2 rad (68 deg)
-%
-% sz (optional) is the image size
-% used to guess the principal point (u0,v0) when n = 1 (only fov is given)
+% Parameters are:  [hfov, u0, v0, aspect_ratio, skew]
+% sz is used to compute hfov and to guess (u0,v0) if needed
+% K = par2K([hfov, u0, v0, ar, skew], sz) return K with given parameters
+% K = par2K([hfov, u0, v0, ar], sz) return K with given parameters and skew=0
+% K = par2K([hfov, u0, v0], sz ) return K with given parameters and ar=1, skew=0
+% K = par2K([hfov],sz) return K with given hfov and u0=sz(1)/2, v0=sz(2)/2, ar=1, skew=0
+% K = par2K([], sz) returns the K with hfov=1.2, u0=sz(1)/2, v0=sz(2)/2, ar=1, skew=0
 
-% K = par2K([fov, u0, v0, ar, skew]) return K with given parameters
-% K = par2K([fov, u0, v0, ar]) return K with given parameters and skew=0
-% K = par2K([fov, u0, v0]) return K with given parameters and ar=1, skew=0
-% K = par2K([fov],sz) return K with given fov and u0=sz(1)/2, v0=sz(2)/2, ar=1, skew=0
-% K = par2K([]) returns the K of my mobile phone ;-)
-
-
-% from 5 to 3 params this is consistent:  par2K(K2par(K,3))
-% with 1 parameter only (hfov) the size must be given otherwise the
-% principal point is the default
 

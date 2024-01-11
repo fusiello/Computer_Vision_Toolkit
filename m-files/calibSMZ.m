@@ -11,7 +11,7 @@ for i =1:numV
         (kron(H{i}(:,1)',H{i}(:,1)')-kron(H{i}(:,2)',H{i}(:,2)'))*S];
 end
 
-[~,~,V] = svd(L);       % solve
+[~,~,V] = svd(L);  % solve
 B = reshape(S*V(:,end),3,[]);
 
 if trace(B)<0

@@ -13,5 +13,5 @@ function C = cop_from_bearings(U,B)
     s = sign(U(:,1)'*X*B(:,1)); % sign
     X = s * [[0;0;0],X]; % add node 1 and fix sign 
 
-    C = num2cell(reshape(X,3,[]),[1,size(X,2)]);    
+    C = num2cell(X,[1,size(X,2)]);    
 end

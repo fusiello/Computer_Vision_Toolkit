@@ -47,14 +47,15 @@ DiK = -kron(iK', iK) * JK;
 % fundamental matrix btw original points
 F = iK'*R2'*S*R1*iK;
 
+% Sampson residual
+[res, Js] = sampson_fund(F,m1,m2);
+
 % Jacobian of this parametrization of F
 Jp = [kron(iK', iK'*R2'*S)*DR1(:,2:3),...
     -kron(iK'*R1'*S, iK')*K3*DR2,...
     (-K3*kron(eye(3),iK'*R1'*S*R2) + kron(eye(3),iK'*R2'*S*R1))*DiK];
 Jp(:,n+1:end) = []; % remove fixed parameters
 
-% Sampson residual
-[res, Js] = sampson_fund(F,m1,m2);
 J = Js * Jp;
 end
 

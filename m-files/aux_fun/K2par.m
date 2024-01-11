@@ -1,17 +1,20 @@
-function p = K2par( K, n, std_width)
+function p = K2par(K, n, sz )
 %K2PAR K matrix parametrization
-% n is the number of parameters required
-% std_width is the standard widh used to compute the fov
+% n is the number of parameters required (1 to 5)
+% sz is the image size
 
-if nargin < 3
-    std_width = 2000;
+% sz must be provided for p to be meaningful, 
+% however par2K(K2par(K, 5, sz), sz) is consistent with any sz, 
+% so we provide a default only for this usage
+if nargin < 3 
+    sz  = [2000, 1500];
 end
 
 if nargin < 2
     n = 5; % default is 5 parameters
 end
 
-hfov = 2*atan(std_width/(2*K(1,1)));
+hfov = 2*atan(sz(1)/(2*K(1,1)));
 theta = atan(-K(1,1)/K(1,2));
 
 p = [hfov,  K(1,3), K(2,3),  (K(2,2)/K(1,1))*sin(theta),  theta];
@@ -20,10 +23,8 @@ end
 
 % Parameters are:  [hfov, u0, v0, ar, skew]
 % The focal lenght is function of hfov and width.
-% By default width is set to a standard value of 2000.
-% This value is not  important as long as the same value is used also in
-% par2K, but it is understood that hfov is fictious. If one wants the
-% *real* hfov he/she must supply the *real* width.
+
+
 
 
 

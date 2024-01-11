@@ -7,6 +7,6 @@ function T = translation_synch(U,B)
     X=[0;0;0;X]; % add node 1
     X=reshape(X,3,[]);
     
-    T = num2cell(reshape(X,3,[]),[1,size(X,2)]);
+    T = num2cell(X,[1,size(X,2)]);
     
 end
