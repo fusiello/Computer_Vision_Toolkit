@@ -132,7 +132,7 @@ function [r,J,p]  = fobj(x,m,vis,K_fix,kappa_fix,M_fix,index)
         
         if isempty(index.k(i))
             K = K_fix{i};
-            kappa = kappa_fix{i}; F = double.empty(0,2);
+            kappa = kappa_fix{i}; F = zeros(0, 2);
         end
         
         for j = 1: size(vis,1) % n_pts

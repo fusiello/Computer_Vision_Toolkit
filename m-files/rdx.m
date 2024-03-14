@@ -25,7 +25,7 @@ function [m_d,Jm,Jk] = rdx(k_in,m_i,K)
          + k(2)*r2(1)^2 + k(3)*r2(1)^3 + k(4)*r2(1)^4 + k(1)*r2(1) + 1]...
          * inv(K(1:2,1:2)); %#ok<MINV>
     
-    Jk = double.empty(2,0);
+    Jk = zeros(2, 0);
     for i = 1:n
         Jk = [Jk, K(1:2,1:2) * [x;y].* r2(1).^i];
     end

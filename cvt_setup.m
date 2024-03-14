@@ -8,6 +8,9 @@ addpath(fullfile(root,'thirdparty'          ),'-end');
 
 savepath;
 
-help m-files
-
+if ~logical(exist('OCTAVE_VERSION', 'builtin'))
+    help m-files
+else
+    what('m-files')
+end
 

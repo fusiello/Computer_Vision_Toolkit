@@ -1,5 +1,5 @@
 close all
-reset_random;
+reset_random(17);
 
 normF = @(x) norm(x,'fro');
 
