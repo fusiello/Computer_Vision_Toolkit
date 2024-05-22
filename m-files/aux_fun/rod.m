@@ -1,8 +1,8 @@
 function [R,J] = rod(u,theta)
     %ROD Rodrigues formula: from axis-angle to rotation matrix
     
-    %if theta > eps
-    if true
+    if theta > eps
+    % if true
         N =  [0 -u(3) u(2)
             u(3) 0 -u(1)
             -u(2) u(1) 0 ];

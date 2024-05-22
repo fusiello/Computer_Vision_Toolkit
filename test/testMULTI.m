@@ -253,7 +253,7 @@ for i=1:n_imm
 end
 
 X = cell2mat(Hgt(:));
-Y= cell2mat(cellfun(@inv,Hgt(:)','uni',0));
+Y = cell2mat(cellfun(@inv,Hgt(:)','uni',0));
 Z = X * Y;
 
 % random adjacency matrix

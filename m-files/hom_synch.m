@@ -11,7 +11,8 @@ function H = hom_synch(Z,A)
     
     H=cell(1,n);
     for i=1:n  % Force det = 1
-        H{i} = Q(3*i-2:3*i,:)./nthroot(det(Q(3*i-2:3*i,:)),3);
+        H{i} = Q(3*i-2:3*i,:);
+        H{i} = H{i}./nthroot(det(H{1}),3);
     end
 end
 

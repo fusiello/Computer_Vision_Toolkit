@@ -35,7 +35,9 @@ function [out1, out2] = find_edge (A,in1,in2)
     % (i,j) and (j,i) are considered as a single edge.
     
     
-    [I,J]=find(tril(A,-1));
+     [I,J]=find(tril(A,-1));
+
+    %[I,J]=find(A);
     
     if nargin == 3  && nargout == 1 %  idxOut = find_edge(A,s,t)
         
