@@ -35,11 +35,7 @@ where the respective copyright notices apply.
 
 The functions in this toolkit are described in the book:
 
-* Fusiello, A. Visione computazionale. Tecniche di ricostruzione tridimensionale.  Franco Angeli, Milano, 2018, 2a ed.
-
-The book is written in italian, although the code documentation
-is in english.
-
+* Fusiello, A. [Computer Vision: Three-dimensional Reconstruction Techniques](http://dx.doi.org/https://doi.org/10.1007/978-3-031-34507-4). Springer Cham, 2024.
 
 ---
 Andrea Fusiello                
