@@ -38,7 +38,6 @@ for i = 1:numV
         R(:,1:2) =  - R(:,1:2);
         t = - t;
     end
-    
     P{i} =  K * [R,t];
 end
 end

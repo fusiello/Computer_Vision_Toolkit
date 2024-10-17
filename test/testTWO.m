@@ -164,7 +164,7 @@ plot3(X_obj(1,:), X_obj(2,:), X_obj(3,:),'+b');
 title('Separate exterior o.')
 
 %--------------------------------------------------------------------------
-[P_out,X_out] = bundleadj({K*[R1,t1], K*[R2,t2]},X_obj,{x1, x2});
+[P_out,X_out] = bundleadj({K*[R1,t1], K*[R2,t2]},X_obj,{x1, x2},'Verbose');
 fprintf('Bundle adjustment RMS error:\t %0.5g \n', ...
     rmse(reproj_res_batch(P_out,X_out, {x1, x2})));
 
@@ -192,7 +192,7 @@ plot3(X_obj(1,:), X_obj(2,:), X_obj(3,:),'+b');
 title('Relativo o.')
 %--------------------------------------------------------------------------
 
-[P_out,X_out] = bundleadj({K*[R1,t1], K*[R2,t2]},X_obj,{x1, x2});
+[P_out,X_out] = bundleadj({K*[R1,t1], K*[R2,t2]},X_obj,{x1, x2},'Verbose');
 fprintf('Bundle adjustment RMS error:\t %0.5g \n', ...
     rmse(reproj_res_batch(P_out,X_out, {x1, x2})));
 

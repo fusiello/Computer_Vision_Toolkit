@@ -70,7 +70,7 @@ end
 fprintf('CalibSMZ reproj RMS error:\t\t %0.5g \n',...
     rmse(reproj_res_batch(P_est,M_grid, m_grid)) );
 
-[P_out,M_out] = bundleadj(P_est,M_grid,m_grid,...
+[P_out,M_out] = bundleadj(P_est,M_grid,m_grid,'Verbose',...
     'AdjustCommonIntrinsic','IntrinsicParameters',5, 'FixedPoints',size(M_grid,2));
 
 fprintf('CalibSMZ reproj RMS error:\t\t %0.5g \n', ...
@@ -132,22 +132,22 @@ fprintf('Bundle Adjustment RMS error (before):\t %0.5g \n',...
     rmse(reproj_res_batch(P_in, M_in, m, 'Visibility', vis)) );
 
 %[P_out,M_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'FixedIntrinsic');
-[P_out,M_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'FixedIntrinsic', 'DistortionCoefficients', kappa);
+[P_out,M_out] = bundleadj(P_in,M_in,m,'Verbose','Visibility',vis,'FixedIntrinsic', 'DistortionCoefficients', kappa);
 kappa_out = kappa;
 fprintf('Bundle Adjustment RMS error (after):\t %0.5g \n', ...
-    rmse(reproj_res_batch(P_out,M_out, m, 'Visibility',vis,'DistortionCoefficients', kappa_out) ));
+    rmse(reproj_res_batch(P_out,M_out, m, 'Verbose','Visibility',vis,'DistortionCoefficients', kappa_out) ));
 
 
 % [P_out,M_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustCommonIntrinsic','IntrinsicParameters',5);
-[P_out,M_out, kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustCommonIntrinsic','IntrinsicParameters',5,'DistortionCoefficients', num2cell(zeros(1,n_imm),1));
+[P_out,M_out, kappa_out] = bundleadj(P_in,M_in,m,'Verbose','Visibility',vis,'AdjustCommonIntrinsic','IntrinsicParameters',5,'DistortionCoefficients', num2cell(zeros(1,n_imm),1));
 fprintf('Bundle Adjustment RMS error (after):\t %0.5g \n', ...
-    rmse(reproj_res_batch(P_out,M_out, m, 'Visibility',vis,'DistortionCoefficients', kappa_out) ));
+    rmse(reproj_res_batch(P_out,M_out, m, 'Verbose','Visibility',vis,'DistortionCoefficients', kappa_out) ));
 
 
 % [P_out,M_out,kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustSeparateIntrinsic');
-[P_out,M_out,kappa_out] = bundleadj(P_in,M_in,m,'Visibility',vis,'AdjustSeparateIntrinsic','DistortionCoefficients', num2cell(zeros(1,n_imm),1));
+[P_out,M_out,kappa_out] = bundleadj(P_in,M_in,m,'Verbose','Visibility',vis,'AdjustSeparateIntrinsic','DistortionCoefficients', num2cell(zeros(1,n_imm),1));
 fprintf('Bundle Adjustment RMS error (after):\t %0.5g \n', ...
-    rmse(reproj_res_batch(P_out,M_out, m, 'Visibility',vis,'DistortionCoefficients', kappa_out) ));
+    rmse(reproj_res_batch(P_out,M_out, m, 'Verbose','Visibility',vis,'DistortionCoefficients', kappa_out) ));
 
 disp(' ');
 %---------------------------------------------------------------------

@@ -3,7 +3,7 @@ function K_out = autocalMC(F,K0)
 
 k0 = K2par(K0,3);  % aspect ratio=1, skew=0
 
-k_out = lsq_nonlin(@(x)fobj(x,F),k0);
+k_out = lsq_nonlin(@(x)fobj(x,F),k0,'Verbose');
 
 K_out = par2K(k_out);
 
