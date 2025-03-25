@@ -24,7 +24,7 @@ K = inv(iK); K = K./K(3,3);
 % compute extrinsic parameters
 for i = 1:numV
     A = iK * H{i};
-    A = A/norm(A(:,1)); % remove scale
+    A = A/norm(A(:,1)); % remove scaleb 
     
     R = [A(:,1:2) , cross(A(:,1), A(:,2))];
     t = A(:,3);

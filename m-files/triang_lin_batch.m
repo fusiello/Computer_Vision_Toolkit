@@ -12,7 +12,7 @@ end
     
 M = NaN(3,size(m{1},2));
 for i = 1:size(m{1},2)
-    % triangulationfor the i-th point
+    % triangulation for the i-th point
       M(:,i) = triang_lin(P(vis(i,:)),num2cell(squeeze(points(:,i,vis(i,:))),1));
 end
 

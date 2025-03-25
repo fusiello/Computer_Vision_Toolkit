@@ -228,6 +228,9 @@ fprintf('Fundamental LMS Smps error:\t %0.5g \n', rmse(sampson_fund(F_lms,x1(:,i
 fprintf('Fundamental IRLS Smps error:\t %0.5g \n', rmse(sampson_fund(F_irls,x1(:,in),x2(:,in))));
 
 
+return
+
+
 disp(' ');
 %-------------------------------------------------------------------------
 % Homography
