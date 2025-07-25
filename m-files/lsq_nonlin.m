@@ -15,16 +15,16 @@ end
 opts = parse_options(varargin);
 
 % constants
-MaxIterations = 200;
+MaxIterations = 800;
 FunctionTol = 1e-10;
-StepTol = 1e-6;
+StepTol = 1e-5;
 
 % lambda = 0 is Gauss-Newton
 % lambda > 0 is Levenberg-Marquardt (default)
 if opts.GaussNewton
     lambda = 0;
 else
-    lambda = 1;
+    lambda = 0.01;
 end
 
 if ~use_LSQNONLIN
@@ -106,6 +106,12 @@ if ~use_LSQNONLIN
             dx = - H \ J' * y;
         end
         % here we have a tentative update dx
+
+        %% Clamp lambda
+        if lambda ~= 0 && (lambda > 1e7 || lambda < 1e-7)
+            lambda = 0.01;
+            %fprintf('\tlsq_nonlin: final residual norm %0.5g \n', norm(y));
+        end
     end
     if opts.verbose
         fprintf('\tlsq_nonlin: final residual norm %0.5g \n', norm(y));

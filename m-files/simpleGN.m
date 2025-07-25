@@ -15,7 +15,7 @@ function x = simpleGN(res,x0)
         x_prev = x; y_prev = y;
         x = x + dx;
         [y,J]   = res(x);
-        fprintf('\tsimpleGN: residual norm %0.5g \n', norm(y));
+        %fprintf('\tsimpleGN: residual norm %0.5g \n', norm(y));
         
         %% Step 2: Test the move: does it increase error?
         if  norm(y) < norm(y_prev)
@@ -25,7 +25,7 @@ function x = simpleGN(res,x0)
         else 
             % restore old values
             x = x_prev; y = y_prev;
-            disp('increase')
+            %disp('increase')
             break % GN does not accept error incraese
         end
         
